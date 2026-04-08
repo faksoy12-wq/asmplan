@@ -23,12 +23,12 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
                 }
             }
         }
     </script>
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=10">
     
     <!-- PWA Settings -->
     <link rel="manifest" href="manifest.json">
@@ -39,18 +39,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <style>
-        /* iOS PWA & Scroll Fix */
-        html, body {
-            height: 100%;
-            background-color: #f8fafc; /* bg-slate-50 */
-            overscroll-behavior-y: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        body {
-            min-height: 100dvh;
-        }
-    </style>
+
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-[100dvh] relative selection:bg-blue-200">
     <!-- Background Elements -->
