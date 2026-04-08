@@ -15,7 +15,7 @@
         html, body {
             margin: 0;
             padding: 0;
-            background-color: #fcfdff;
+            background-color: transparent; /* Fix: allow mesh to show through */
             overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
             height: 100%;
@@ -149,8 +149,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-[100dvh] relative selection:bg-blue-200">
     <!-- Background Elements -->
-    <!-- Advanced Mesh Backgrounds -->
-    <div class="mesh-container fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-60">
+    <div class="mesh-container fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-slate-50">
         <div class="mesh-blob mesh-1"></div>
         <div class="mesh-blob mesh-2"></div>
         <div class="mesh-blob mesh-3"></div>
@@ -311,11 +310,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=12"></script>
+    <script src="app.js?v=13"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=12').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=13').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });
