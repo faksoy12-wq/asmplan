@@ -185,13 +185,13 @@ function getDayProps(dateStr) {
             
             innerHtml += `
                 <div class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full animate-enter" style="background-color: ${docInfo.color}"></div>
-                <div class="flex flex-col items-center justify-center h-full w-full relative z-10 animate-enter p-1 pb-6">
-                    <i class="ph ph-stethoscope text-2xl md:text-5xl opacity-35 animate-heartbeat mb-1" style="color: ${docInfo.color}"></i>
-                    <span class="text-[10px] md:text-[13px] font-bold text-slate-700 tracking-tight text-center leading-tight max-w-[80%]">
+                <div class="flex flex-col items-center justify-center h-full w-full relative z-10 animate-enter p-1 md:pb-8">
+                    <i class="ph ph-stethoscope text-3xl md:text-5xl opacity-30 animate-heartbeat mb-1" style="color: ${docInfo.color}"></i>
+                    <span class="doc-name-label text-[10px] md:text-xs font-black text-slate-700 tracking-tight text-center leading-tight max-w-[85%] truncate transition-colors group-hover:text-blue-600">
                         ${docInfo.name}
                     </span>
                 </div>
-                <div class="absolute bottom-1.5 right-1.5 w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[10px] font-black text-white shadow-md border-2 border-white transform transition-transform group-hover:scale-110 z-20" style="background-color: ${docInfo.color}">
+                <div class="absolute bottom-1 right-1 md:bottom-2 md:right-2 w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-[9px] md:text-[11px] font-black text-white shadow-lg border-2 border-white transform transition-all duration-300 group-hover:scale-125 group-hover:rotate-6 z-20" style="background-color: ${docInfo.color}">
                     ${docInfo.initial}
                 </div>
             `;
