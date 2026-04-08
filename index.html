@@ -91,7 +91,7 @@
     </main>
 
     <!-- Floating Popover -->
-    <div id="popover" class="absolute z-50 pointer-events-none opacity-0 scale-95 transition-all duration-150 ease-out transform origin-top shadow-2xl rounded-2xl border border-white/60 p-2 w-[160px] md:w-[180px] bg-white/80 backdrop-blur-2xl">
+    <div id="popover" class="hidden absolute z-50 pointer-events-none opacity-0 scale-95 transition-all duration-150 ease-out transform origin-top shadow-2xl rounded-2xl border border-white/60 p-2 w-[160px] md:w-[180px] bg-white/80 backdrop-blur-2xl">
         <div class="flex flex-col gap-1 pointer-events-auto" id="popoverContent">
             <button class="menu-btn doctor-select" data-doc="1">
                 <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm doc-badge" id="popDoc1Avatar">H1</div>
@@ -112,7 +112,7 @@
     </div>
 
     <!-- About Modal Overlay -->
-    <div id="aboutModalOverlay" class="fixed inset-0 z-[60] bg-slate-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div id="aboutModalOverlay" class="hidden fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
         <div id="aboutModal" class="bg-white/95 backdrop-blur-xl border border-white shadow-2xl rounded-[2rem] w-full max-w-sm p-8 text-center transform scale-95 opacity-0 transition-all duration-300 relative overflow-hidden group">
             <!-- Close Btn -->
             <button id="closeAboutBtn" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors active:scale-95 z-20">
@@ -138,7 +138,7 @@
     </div>
 
     <!-- Settings Modal Overlay -->
-    <div id="settingsOverlay" class="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div id="settingsOverlay" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
         <div id="settingsModal" class="bg-white/95 backdrop-blur-xl border border-white shadow-2xl rounded-3xl w-full max-w-md p-6 transform scale-95 opacity-0 transition-all duration-300">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
@@ -207,11 +207,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=6"></script>
+    <script src="app.js?v=9"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=6').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=9').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });

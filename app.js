@@ -95,11 +95,11 @@ function render() {
 
 function renderYearView() {
     appState.currentPreview = null;
-    calendarContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6";
+    calendarContainer.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-7";
     let html = '';
     
     for (let month = 0; month < 12; month++) {
-        const delay = month * 0.05;
+        const delay = month * 0.04;
         let doc1Count = 0;
         let doc2Count = 0;
         let assignedCount = 0;
@@ -114,29 +114,39 @@ function renderYearView() {
 
         let docInfoHtml = '';
         if (assignedCount === 0) {
-            docInfoHtml = `<p class="text-[13px] font-medium text-slate-500 mt-2">Henüz planlanmadı</p>`;
+            docInfoHtml = `<div class="mt-2 flex flex-col items-center gap-1 opacity-40">
+                             <i class="ph ph-calendar-blank text-2xl"></i>
+                             <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Henüz Planlanmadı</p>
+                           </div>`;
         } else {
             let pieces = [];
             if (doc1Count > 0) {
-                pieces.push(`<div class="flex items-center gap-2 justify-center"><div class="w-2.5 h-2.5 rounded-full shadow-sm" style="background-color: ${appState.settings.doc1.color}"></div><span class="text-[13px] font-semibold text-slate-600">${doc1Count} iş günü planlandı</span></div>`);
+                pieces.push(`<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 border border-white/60 shadow-sm leading-none">
+                                <div class="w-2.5 h-2.5 rounded-full" style="background-color: ${appState.settings.doc1.color}; box-shadow: 0 0 10px ${appState.settings.doc1.color}66"></div>
+                                <span class="text-[12px] font-bold text-slate-700">${doc1Count} Gün</span>
+                             </div>`);
             }
             if (doc2Count > 0) {
-                pieces.push(`<div class="flex items-center gap-2 justify-center"><div class="w-2.5 h-2.5 rounded-full shadow-sm" style="background-color: ${appState.settings.doc2.color}"></div><span class="text-[13px] font-semibold text-slate-600">${doc2Count} iş günü planlandı</span></div>`);
+                pieces.push(`<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/50 border border-white/60 shadow-sm leading-none">
+                                <div class="w-2.5 h-2.5 rounded-full" style="background-color: ${appState.settings.doc2.color}; box-shadow: 0 0 10px ${appState.settings.doc2.color}66"></div>
+                                <span class="text-[12px] font-bold text-slate-700">${doc2Count} Gün</span>
+                             </div>`);
             }
-            docInfoHtml = `<div class="flex flex-col gap-1.5 mt-3 w-full">${pieces.join('')}</div>`;
+            docInfoHtml = `<div class="flex flex-wrap justify-center gap-2 mt-4 w-full">${pieces.join('')}</div>`;
         }
 
         html += `
-            <div id="month-card-${month}" onclick="app.setPreviewMonth(${month})" class="bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 month-card-enter hover:bg-white hover:shadow-xl hover:border-blue-200 md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem]" style="animation-delay: ${delay}s">
-                <h3 id="month-title-${month}" class="text-2xl font-extrabold text-slate-800 tracking-tight transition-colors">${MONTHS[month]}</h3>
+            <div id="month-card-${month}" onclick="app.setPreviewMonth(${month})" class="glass-card month-card animate-enter rounded-[2.5rem] p-8 cursor-pointer flex flex-col items-center justify-center text-center h-[14rem] md:h-[15rem]" style="animation-delay: ${delay}s">
+                <span class="absolute top-4 left-4 text-[10px] font-black text-slate-300 tracking-tighter uppercase opacity-30">${appState.activeYear}</span>
+                <h3 id="month-title-${month}" class="text-3xl font-black text-slate-800 tracking-tight transition-all duration-300 drop-shadow-sm">${MONTHS[month]}</h3>
                 
                 <div id="month-info-${month}" class="transition-opacity w-full">
                     ${docInfoHtml}
                 </div>
                 
-                <div id="month-btn-${month}" style="display: none;" class="mt-5 w-full">
-                    <button onclick="app.setActiveMonth(${month}, event)" class="mx-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold shadow-lg shadow-blue-500/30 active:scale-95 flex items-center justify-center gap-2 hover:shadow-xl transition-all w-full max-w-[200px]">
-                        Planla <i class="ph ph-calendar-plus text-xl"></i>
+                <div id="month-btn-${month}" class="hidden mt-6 w-full">
+                    <button onclick="app.setActiveMonth(${month}, event)" class="mx-auto w-full max-w-[160px] py-4 rounded-[1.5rem] bg-slate-900 text-white font-bold shadow-xl shadow-slate-900/20 active:scale-95 flex items-center justify-center gap-2 hover:bg-blue-600 hover:shadow-blue-500/30 transition-all duration-300">
+                        Aç <i class="ph ph-arrow-right font-bold"></i>
                     </button>
                 </div>
             </div>
@@ -301,19 +311,22 @@ function setPreviewMonth(monthIndex) {
         
         if (m === appState.currentPreview) {
             // Aktif Et (Mavi Gölgeli Mikro UX)
-            card.className = "bg-white backdrop-blur-md rounded-[2.5rem] p-6 border border-blue-200 shadow-[0_10px_40px_-5px_rgba(59,130,246,0.3)] ring-4 ring-blue-50/80 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem] transform md:scale-105 scale-[1.02] z-10 relative";
-            title.className = "text-2xl font-extrabold text-blue-600 tracking-tight transition-colors drop-shadow-sm";
-            info.style.display = "none";
-            
-            btnObj.style.display = "block";
-            btnObj.className = "mt-5 w-full animate-[slideUpFade_0.2s_ease-out]";
+            card.classList.add('ring-4', 'ring-blue-100', 'border-blue-300', 'bg-white');
+            card.classList.remove('h-[14rem]', 'md:h-[15rem]');
+            card.style.height = '16rem'; 
+            title.classList.add('text-blue-600', 'scale-110');
+            info.classList.add('hidden');
+            btnObj.classList.remove('hidden');
+            btnObj.classList.add('block', 'animate-enter');
         } else {
             // Pasif Et (Eski Haline Döndür)
-            card.className = "bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 hover:bg-white hover:shadow-xl md:hover:-translate-y-1 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem]";
-            title.className = "text-2xl font-extrabold text-slate-800 tracking-tight transition-colors";
-            info.style.display = "block";
-            btnObj.style.display = "none";
-            btnObj.className = "mt-5 w-full"; // Animasyonu sıfırla
+            card.classList.remove('ring-4', 'ring-blue-100', 'border-blue-300', 'bg-white');
+            card.style.height = ''; 
+            card.classList.add('h-[14rem]', 'md:h-[15rem]');
+            title.classList.remove('text-blue-600', 'scale-110');
+            info.classList.remove('hidden');
+            btnObj.classList.add('hidden');
+            btnObj.classList.remove('block', 'animate-enter');
         }
     }
 }
