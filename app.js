@@ -157,6 +157,91 @@ function renderYearView() {
     calendarContainer.innerHTML = html;
 }
 
+function getDayProps(dateStr) {
+    const dateParts = dateStr.split('-');
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1;
+    const day = parseInt(dateParts[2]);
+    
+    const dateObj = new Date(year, month, day);
+    const dayOfWeek = (dateObj.getDay() === 0 ? 6 : dateObj.getDay() - 1);
+    const isWeekend = dayOfWeek === 5 || dayOfWeek === 6;
+    const holiday = HOLIDAYS[appState.activeYear][dateStr];
+    
+    const isHalfDay = holiday && holiday.type === 'half';
+    const isFullDayHoliday = holiday && holiday.type === 'full';
+    const assignedDoc = appState.assignments[dateStr];
+    const isManualHoliday = assignedDoc === 'manual_holiday';
+
+    let cellClass = "day-cell rounded-2xl border relative h-20 md:h-28 flex flex-col p-2 md:p-3 transition-all duration-500 group overflow-hidden ";
+    let dayNumClass = "text-[10px] md:text-xs font-black z-10 absolute top-2 right-3 ";
+    let innerHtml = '';
+    let onClickAttr = null;
+
+    if (assignedDoc && assignedDoc !== 'manual_holiday' && !isWeekend && !isFullDayHoliday) {
+        const docInfo = appState.settings[assignedDoc];
+        if (docInfo) {
+            cellClass += " bg-white shadow-sm border-slate-100 hover:shadow-2xl hover:shadow-slate-300/50 hover:-translate-y-1.5 cursor-pointer";
+            
+            innerHtml += `
+                <div class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full animate-enter" style="background-color: ${docInfo.color}"></div>
+                <div class="flex flex-col items-center justify-center h-full w-full relative z-10 animate-enter p-1 pb-6">
+                    <i class="ph ph-stethoscope text-2xl md:text-5xl opacity-35 animate-heartbeat mb-1" style="color: ${docInfo.color}"></i>
+                    <span class="text-[10px] md:text-[13px] font-bold text-slate-700 tracking-tight text-center leading-tight max-w-[80%]">
+                        ${docInfo.name}
+                    </span>
+                </div>
+                <div class="absolute bottom-1.5 right-1.5 w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center text-[10px] font-black text-white shadow-md border-2 border-white transform transition-transform group-hover:scale-110 z-20" style="background-color: ${docInfo.color}">
+                    ${docInfo.initial}
+                </div>
+            `;
+            dayNumClass += " text-slate-600 opacity-100";
+            onClickAttr = `app.openPopover('${dateStr}', event)`;
+        }
+    } else if (isWeekend || isFullDayHoliday || isManualHoliday) {
+        if (isFullDayHoliday || isManualHoliday) {
+            cellClass += " bg-emerald-50/40 border-emerald-50" + (isFullDayHoliday ? " pointer-events-none" : " cursor-pointer interactive hover:bg-emerald-50/80 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/5"); 
+            dayNumClass += " text-emerald-700/60"; 
+            innerHtml += `
+                <div class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-emerald-400 animate-enter"></div>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.15] animate-enter">
+                    <i class="ph ph-tree-palm text-4xl md:text-6xl text-emerald-500"></i>
+                </div>
+                <div class="absolute bottom-2 left-3 text-[8px] font-black text-emerald-600/40 tracking-widest uppercase">TATİL</div>
+            `;
+            if (isManualHoliday) {
+                onClickAttr = `app.openPopover('${dateStr}', event)`;
+            }
+        } else {
+            cellClass += " bg-slate-50/30 border-slate-50 pointer-events-none"; 
+            dayNumClass += " text-slate-400";
+        }
+    } else {
+        cellClass += " bg-white/60 backdrop-blur-sm border-slate-100/80 cursor-pointer interactive hover:border-blue-200 hover:bg-white hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1.5";
+        dayNumClass += " text-slate-600 group-hover:text-blue-600";
+        
+        innerHtml += `
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+                <i class="ph ph-plus-circle text-3xl text-blue-500"></i>
+            </div>
+        `;
+
+        if (isHalfDay) {
+            cellClass += ' !bg-emerald-50/20';
+            innerHtml += `<div class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-emerald-300/40"></div>`;
+            innerHtml += `<div class="absolute bottom-2 right-3 text-emerald-400/60"><i class="ph ph-clock-countdown text-sm"></i></div>`;
+        }
+
+        onClickAttr = `app.openPopover('${dateStr}', event)`;
+    }
+
+    return { 
+        classes: cellClass.trim(), 
+        innerHtml: `<span class="${dayNumClass}">${day}</span>${innerHtml}`, 
+        onClick: onClickAttr
+    };
+}
+
 function renderMonthView(month) {
     calendarContainer.className = "w-full max-w-5xl mx-auto mt-2";
     
@@ -192,56 +277,11 @@ function renderMonthView(month) {
 
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${appState.activeYear}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dateObj = new Date(appState.activeYear, month, day);
-        const dayOfWeek = (dateObj.getDay() === 0 ? 6 : dateObj.getDay() - 1);
-        const isWeekend = dayOfWeek === 5 || dayOfWeek === 6;
-        const holiday = HOLIDAYS[appState.activeYear][dateStr];
+        const props = getDayProps(dateStr);
         
-        let cellClass = "day-cell rounded-2xl border relative h-20 md:h-28 flex flex-col p-2 md:p-3 overflow-hidden ";
-        let dayNumClass = "text-sm md:text-base font-bold z-10 ";
-        let innerHtml = '';
-        let onClickAttr = '';
-
-        const isHalfDay = holiday && holiday.type === 'half';
-        const isFullDayHoliday = holiday && holiday.type === 'full';
-        
-        const assignedDoc = appState.assignments[dateStr];
-        if (assignedDoc && !isWeekend && !isFullDayHoliday) {
-            const docInfo = appState.settings[assignedDoc];
-            if (docInfo) {
-                innerHtml += `
-                    <div class="absolute bottom-2 right-2 w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md border-2 border-white animate-[slideUpFade_0.2s_ease_forwards] transform hover:scale-110 transition-transform doc-badge" style="background-color: ${docInfo.color}" title="${docInfo.name}">
-                        ${docInfo.initial}
-                    </div>
-                `;
-            }
-        }
-
-        if (isWeekend || isFullDayHoliday) {
-            if (isFullDayHoliday) {
-                cellClass += "bg-emerald-100/60 border-emerald-200 pointer-events-none"; 
-                dayNumClass += "text-emerald-700/60 relative z-10"; 
-                innerHtml += `<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.15]"><i class="ph ph-tree-palm text-6xl text-emerald-600"></i></div>`;
-            } else {
-                cellClass += "bg-slate-50 border-slate-100 pointer-events-none"; 
-                dayNumClass += "text-slate-300 relative z-10";
-            }
-        } else {
-            cellClass += "bg-white border-slate-200/70 cursor-pointer interactive group shadow-[0_2px_10px_-4px_rgba(0,0,0,0.02)]";
-            dayNumClass += "text-slate-600 group-hover:text-blue-600 transition-colors relative z-10";
-            
-            if (isHalfDay) {
-                cellClass += ' bg-gradient-to-br from-white from-80% to-emerald-100/50 hover:to-emerald-100 transition-all';
-                innerHtml += `<div class="absolute top-2 right-2 text-emerald-500/50"><i class="ph ph-clock-countdown"></i></div>`;
-            }
-
-            onClickAttr = `onclick="app.openPopover('${dateStr}', event)"`;
-        }
-
         html += `
-            <div class="${cellClass}" id="cell-${dateStr}" ${onClickAttr}>
-                <span class="${dayNumClass}">${day}</span>
-                ${innerHtml}
+            <div class="${props.classes}" id="cell-${dateStr}" ${props.onClick ? `onclick="${props.onClick}"` : ''}>
+                ${props.innerHtml}
             </div>
         `;
     }
@@ -250,25 +290,19 @@ function renderMonthView(month) {
     calendarContainer.innerHTML = html;
 }
 
-// Olay Yalnızca İlgili DOM Hücresini Günceller (Sayfa Yenilenmez, Flicker Yapmaz)
 function updateCellDOM(dateStr) {
     const cell = document.getElementById('cell-' + dateStr);
     if (!cell) return;
     
-    const existing = cell.querySelector('.doc-badge');
-    if (existing) existing.remove();
+    const props = getDayProps(dateStr);
+    cell.className = props.classes;
+    cell.innerHTML = props.innerHtml;
     
-    const assignedDoc = appState.assignments[dateStr];
-    if (assignedDoc) {
-        const docInfo = appState.settings[assignedDoc];
-        if (docInfo) {
-            const badge = document.createElement('div');
-            badge.className = "absolute bottom-2 right-2 w-7 h-7 md:w-9 md:h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md border-2 border-white animate-[slideUpFade_0.2s_ease_forwards] transform hover:scale-110 transition-transform doc-badge";
-            badge.style.backgroundColor = docInfo.color;
-            badge.title = docInfo.name;
-            badge.textContent = docInfo.initial;
-            cell.appendChild(badge);
-        }
+    // Uygulama mantığına göre onclick handlerını güvenli şekilde ata
+    if (props.onClick) {
+        cell.onclick = (e) => app.openPopover(dateStr, e);
+    } else {
+        cell.onclick = null;
     }
 }
 
@@ -399,6 +433,8 @@ document.querySelectorAll('.doctor-select').forEach(btn => {
         
         if (docId === 'clear') {
             delete appState.assignments[appState.selectedDate];
+        } else if (docId === 'holiday') {
+            appState.assignments[appState.selectedDate] = 'manual_holiday';
         } else {
             appState.assignments[appState.selectedDate] = 'doc' + docId;
         }
@@ -509,18 +545,18 @@ function clearCurrentMonth() {
     if (!confirm(`${MONTHS[appState.activeMonth]} ${appState.activeYear} için tüm nöbet planlamalarını silmek istediğinize emin misiniz?`)) return;
 
     const prefix = `${appState.activeYear}-${String(appState.activeMonth + 1).padStart(2, '0')}`;
-    let clearedCount = 0;
+    const clearedDates = [];
     
     Object.keys(appState.assignments).forEach(dateStr => {
         if (dateStr.startsWith(prefix)) {
             delete appState.assignments[dateStr];
-            clearedCount++;
+            clearedDates.push(dateStr);
         }
     });
     
-    if (clearedCount > 0) {
+    if (clearedDates.length > 0) {
         saveAssignments();
-        render(); 
+        clearedDates.forEach(d => updateCellDOM(d));
     }
 }
 

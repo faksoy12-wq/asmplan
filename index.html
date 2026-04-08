@@ -115,6 +115,16 @@
             transform: translateX(4px);
             background-color: rgba(59, 130, 246, 0.08);
         }
+        @keyframes heartbeat {
+            0% { transform: scale(1); opacity: 0.15; }
+            14% { transform: scale(1.15); opacity: 0.25; }
+            28% { transform: scale(1); opacity: 0.15; }
+            42% { transform: scale(1.15); opacity: 0.25; }
+            70% { transform: scale(1); opacity: 0.15; }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 1.5s 1 ease-in-out forwards;
+        }
     </style>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -208,6 +218,12 @@
             <button class="menu-btn doctor-select" data-doc="2">
                 <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm doc-badge" id="popDoc2Avatar">H2</div>
                 <span class="text-sm font-medium text-slate-700" id="popDoc2Name">Hekim 2</span>
+            </button>
+            <button class="menu-btn doctor-select group" data-doc="holiday">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-600 group-hover:bg-emerald-200 transition-colors">
+                    <i class="ph ph-tree-palm text-sm"></i>
+                </div>
+                <span class="text-sm font-medium text-slate-700 group-hover:text-emerald-700 transition-colors">Tatil</span>
             </button>
             <div class="h-px w-full bg-slate-200/50 my-1"></div>
             <button class="menu-btn doctor-select group" data-doc="clear">
