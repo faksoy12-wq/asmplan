@@ -329,7 +329,6 @@ function setYear(y) {
     }
     render();
 }
-
 function setPreviewMonth(monthIndex) {
     if (appState.currentPreview === monthIndex) {
         appState.currentPreview = null;
