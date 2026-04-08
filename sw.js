@@ -1,4 +1,4 @@
-const CACHE_NAME = 'asm-plan-v1';
+const CACHE_NAME = 'asm-plan-v2';
 const urlsToCache = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Yeni versiyon yüklendiği an beklemeden eskisini devreden çıkar
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -16,30 +17,41 @@ self.addEventListener('install', event => {
   );
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-  );
-});
-
 self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim()); // Tüm açık sekmelerde kontrolü anında ele al
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
+            return caches.delete(cacheName); // Eski önbelleği (v1) komple sil
           }
         })
       );
     })
+  );
+});
+
+// Network First, Fallback to Cache Stratejisi
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // İnternet varsa ve başarılıysa ağdan (Vercel/Github) taze veriyi ver ve önbelleğe kopyala
+        if(!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+        let responseToCache = response.clone();
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+        return response;
+      })
+      .catch(() => {
+        // Sadece internet (network) çöktüğünde önbellekten (offline pwa) cevap dön
+        return caches.match(event.request);
+      })
   );
 });
