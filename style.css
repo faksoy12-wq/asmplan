@@ -5,8 +5,14 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    height: 100%;
+    background-color: #f8fafc;
+    overscroll-behavior-y: none;
+  }
   body {
     -webkit-tap-highlight-color: transparent;
+    min-height: 100dvh;
   }
 }
 

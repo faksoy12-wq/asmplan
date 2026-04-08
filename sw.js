@@ -1,10 +1,11 @@
-const CACHE_NAME = 'asm-plan-v2';
+const CACHE_NAME = 'asm-plan-v3';
 const urlsToCache = [
   './',
   './index.html',
   './app.js',
   './style.css',
-  './icon.svg'
+  './icon.svg',
+  './icon.png'
 ];
 
 self.addEventListener('install', event => {

@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ASM Çalışma Planı</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +31,19 @@
     <meta name="apple-mobile-web-app-title" content="ASM Plan">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon.png">
+    
+    <style>
+        /* iOS PWA & Scroll Fix */
+        html, body {
+            height: 100%;
+            background-color: #f8fafc; /* bg-slate-50 */
+            overscroll-behavior-y: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-[100dvh] relative selection:bg-blue-200">
     <!-- Background Elements -->
