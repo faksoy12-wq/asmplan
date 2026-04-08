@@ -21,7 +21,7 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=5">
     
     <!-- PWA Settings -->
     <link rel="manifest" href="manifest.json">
@@ -207,11 +207,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=4').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=5').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });
