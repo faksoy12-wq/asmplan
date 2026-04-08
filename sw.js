@@ -1,4 +1,4 @@
-const CACHE_NAME = 'asm-plan-v5';
+const CACHE_NAME = 'asm-plan-v6';
 const urlsToCache = [
   './',
   './index.html',
