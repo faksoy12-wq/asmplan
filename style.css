@@ -1,93 +1,106 @@
-/* style.css - Premium ASM Takvim v2 */
+/* style.css - Ultra Premium ASM Takvim v3 (Glass 2.0) */
 
-/* Global Stability */
+/* Global Stability & Typography */
 html, body {
     margin: 0;
     padding: 0;
-    background-color: #f8fafc;
+    background-color: #fcfdff;
     overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
     height: 100%;
+    color: #1e293b;
 }
 
 body {
     min-height: 100dvh;
 }
 
+/* Mesh Gradient Animation */
+.mesh-container {
+    filter: blur(100px);
+}
+
+.mesh-blob {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: rotate 20s infinite linear;
+}
+
+.mesh-1 { background: #60a5fa; top: -10%; left: -10%; animation-duration: 25s; }
+.mesh-2 { background: #2dd4bf; bottom: -10%; right: -10%; animation-duration: 30s; animation-direction: reverse; }
+.mesh-3 { background: #818cf8; top: 30%; left: 40%; animation-duration: 35s; }
+
+@keyframes rotate {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(50px, 80px) rotate(120deg) scale(1.1); }
+    66% { transform: translate(-40px, 40px) rotate(240deg) scale(0.9); }
+    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
 /* Ultra-smooth customized Scrollbar */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: transparent;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-    background: rgba(203, 213, 225, 0.4);
+    background: rgba(148, 163, 184, 0.2);
     border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(148, 163, 184, 0.6);
-}
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.4); }
 
-/* Glass Panels */
+/* Glass 2.0 Card System */
 .glass-card {
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 10px 20px -5px rgba(0, 0, 0, 0.03),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
-/* Month Card Interactions */
 .month-card {
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
 .month-card:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.2);
+    background: rgba(255, 255, 255, 0.85);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 25px 50px -12px rgba(59, 130, 246, 0.15),
+        0 0 0 1px rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Day Cell Premium */
+.day-cell {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.day-cell:hover:not(.empty) {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+    transform: scale(1.05);
+    z-index: 10;
 }
 
 /* Animations */
 @keyframes slideUpFade {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .animate-enter {
-    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Popover & Multi-select */
+/* Popover & Menus */
 .menu-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 12px;
-    border-radius: 14px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .menu-btn:hover {
-    background-color: rgba(59, 130, 246, 0.05);
-}
-
-/* Assigned Colors Dots */
-.doc-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    box-shadow: 0 0 10px currentColor;
+    transform: translateX(4px);
+    background-color: rgba(59, 130, 246, 0.08);
 }

@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ASM Çalışma Planı</title>
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Outfit', sans-serif !important; }
+    </style>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,9 +54,11 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-[100dvh] relative selection:bg-blue-200">
     <!-- Background Elements -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-teal-400/20 blur-[120px]"></div>
+    <!-- Advanced Mesh Backgrounds -->
+    <div class="mesh-container fixed inset-0 z-[-1] overflow-hidden pointer-events-none opacity-60">
+        <div class="mesh-blob mesh-1"></div>
+        <div class="mesh-blob mesh-2"></div>
+        <div class="mesh-blob mesh-3"></div>
     </div>
 
     <!-- Header -->
@@ -207,11 +216,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=9"></script>
+    <script src="app.js?v=10"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=9').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=10').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });
