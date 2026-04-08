@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASM Çalışma Planı</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Tailwind CSS (CDN - v3) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen relative overflow-x-hidden selection:bg-blue-200">
+    <!-- Background Elements -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-teal-400/20 blur-[120px]"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-40 bg-white/70 backdrop-blur-md border-b border-white/40 shadow-sm transition-all h-20 flex items-center px-4 md:px-12">
+        <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-teal-400 items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                    <i class="ph ph-calendar-plus text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg md:text-xl leading-tight text-slate-800 tracking-tight">ASM Çalışma Planı</h1>
+                    <!-- Year Toggle -->
+                    <div class="flex items-center gap-1 mt-1 bg-slate-100/80 rounded-md p-1 border border-slate-200 w-fit backdrop-blur-sm">
+                        <button id="year2026Btn" onclick="app.setYear(2026)" class="px-3 py-0.5 rounded text-[11px] md:text-xs font-bold transition-all bg-white shadow-sm text-blue-600">2026</button>
+                        <button id="year2027Btn" onclick="app.setYear(2027)" class="px-3 py-0.5 rounded text-[11px] md:text-xs font-medium text-slate-500 hover:text-slate-700 transition-all">2027</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button id="aboutBtn" class="flex items-center gap-2 px-3 py-2 rounded-xl border border-transparent hover:border-slate-200 bg-transparent hover:bg-white/80 transition-all text-sm font-medium text-slate-500 hover:text-rose-500 active:scale-95 group">
+                    <i class="ph ph-heart text-lg group-hover:fill-rose-500 transition-colors"></i>
+                    <span class="hidden md:inline">Hakkında</span>
+                </button>
+                <div class="w-px h-6 bg-slate-200 mx-1"></div>
+                <button id="settingsBtn" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/80 hover:bg-white border border-slate-200 shadow-sm hover:shadow transition-all text-sm font-medium text-slate-600 hover:text-blue-600 active:scale-95">
+                    <i class="ph ph-gear text-lg"></i>
+                    <span class="hidden md:inline">Ayarlar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-7xl mx-auto pt-24 md:pt-28 pb-20 px-4 md:px-12">
+        <div id="calendarContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- JavaScript will populate this area -->
+        </div>
+    </main>
+
+    <!-- Floating Popover -->
+    <div id="popover" class="absolute z-50 pointer-events-none opacity-0 scale-95 transition-all duration-150 ease-out transform origin-top shadow-2xl rounded-2xl border border-white/60 p-2 w-[160px] md:w-[180px] bg-white/80 backdrop-blur-2xl">
+        <div class="flex flex-col gap-1 pointer-events-auto" id="popoverContent">
+            <button class="menu-btn doctor-select" data-doc="1">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm doc-badge" id="popDoc1Avatar">H1</div>
+                <span class="text-sm font-medium text-slate-700" id="popDoc1Name">Hekim 1</span>
+            </button>
+            <button class="menu-btn doctor-select" data-doc="2">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-sm doc-badge" id="popDoc2Avatar">H2</div>
+                <span class="text-sm font-medium text-slate-700" id="popDoc2Name">Hekim 2</span>
+            </button>
+            <div class="h-px w-full bg-slate-200/50 my-1"></div>
+            <button class="menu-btn doctor-select group" data-doc="clear">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 group-hover:text-red-500 group-hover:bg-red-50 transition-colors">
+                    <i class="ph ph-eraser text-sm"></i>
+                </div>
+                <span class="text-sm font-medium text-slate-500 group-hover:text-red-500 transition-colors">Temizle</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- About Modal Overlay -->
+    <div id="aboutModalOverlay" class="fixed inset-0 z-[60] bg-slate-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div id="aboutModal" class="bg-white/95 backdrop-blur-xl border border-white shadow-2xl rounded-[2rem] w-full max-w-sm p-8 text-center transform scale-95 opacity-0 transition-all duration-300 relative overflow-hidden group">
+            <!-- Close Btn -->
+            <button id="closeAboutBtn" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 rounded-full transition-colors active:scale-95 z-20">
+                <i class="ph ph-x"></i>
+            </button>
+            
+            <div class="w-20 h-20 mx-auto bg-gradient-to-tr from-rose-400 to-orange-400 rounded-3xl rotate-12 flex items-center justify-center shadow-lg shadow-rose-500/20 mb-6 group-hover:rotate-0 transition-transform duration-500 relative z-10">
+                <i class="ph ph-heart text-white text-4xl -rotate-12 group-hover:rotate-0 transition-transform duration-500 drop-shadow-sm"></i>
+            </div>
+            
+            <h3 class="text-xl font-extrabold text-slate-800 mb-2 leading-tight relative z-10">Pay ve Keklikova ASM</h3>
+            <p class="text-sm font-medium text-slate-500 mb-8 px-4 relative z-10">için heyecan ve tutkuyla geliştirildi.</p>
+            
+            <div class="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-6"></div>
+            
+            <div class="flex flex-col items-center relative z-10">
+                <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-2">MİMÁR & GELİŞTİRİCİ</span>
+                <span class="text-sm md:text-base font-semibold text-slate-800 bg-white shadow-sm px-4 py-2 rounded-full border border-slate-200/60 ring-1 ring-slate-100 cursor-default hover:-translate-y-1 transition-transform">Dr. Furkan Aksoy</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal Overlay -->
+    <div id="settingsOverlay" class="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div id="settingsModal" class="bg-white/95 backdrop-blur-xl border border-white shadow-2xl rounded-3xl w-full max-w-md p-6 transform scale-95 opacity-0 transition-all duration-300">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <i class="ph ph-sliders-horizontal text-lg"></i>
+                    </div>
+                    Hekim Ayarları
+                </h2>
+                <button id="closeSettingsBtn" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors active:scale-90">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Doctor 1 Settings -->
+                <div class="p-4 rounded-2xl bg-white shadow-sm border border-slate-100 relative overflow-hidden group hover:border-slate-200 transition-colors">
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 transition-all" id="doc1ColorStrip" style="background-color: #3B82F6"></div>
+                    <div class="ml-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">1. Hekim</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1.5">Görüntülenen İsim</label>
+                                <input type="text" id="doc1Input" value="Dr. Ali" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all focus:bg-white">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="block text-xs font-medium text-slate-500 flex-1">Nöbet Rengi Seçin</label>
+                                <div class="relative w-8 h-8 rounded-full overflow-hidden shadow-sm border border-slate-200 flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" id="doc1ColorPreview" style="background-color: #3B82F6">
+                                    <input type="color" id="doc1Color" value="#3B82F6" class="absolute inset-[-10px] w-[50px] h-[50px] cursor-pointer opacity-0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor 2 Settings -->
+                <div class="p-4 rounded-2xl bg-white shadow-sm border border-slate-100 relative overflow-hidden group hover:border-slate-200 transition-colors">
+                    <div class="absolute top-0 bottom-0 left-0 w-1.5 transition-all" id="doc2ColorStrip" style="background-color: #F43F5E"></div>
+                    <div class="ml-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">2. Hekim</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1.5">Görüntülenen İsim</label>
+                                <input type="text" id="doc2Input" value="Dr. Ayşe" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all focus:bg-white">
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <label class="block text-xs font-medium text-slate-500 flex-1">Nöbet Rengi Seçin</label>
+                                <div class="relative w-8 h-8 rounded-full overflow-hidden shadow-sm border border-slate-200 flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" id="doc2ColorPreview" style="background-color: #F43F5E">
+                                    <input type="color" id="doc2Color" value="#F43F5E" class="absolute inset-[-10px] w-[50px] h-[50px] cursor-pointer opacity-0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end gap-3">
+                <button id="cancelSettingsBtn" class="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 active:bg-slate-100 transition-colors">Vazgeç</button>
+                <button id="saveSettingsBtn" class="px-5 py-2.5 rounded-xl text-sm font-medium relative group overflow-hidden bg-slate-800 text-white shadow-md hover:shadow-lg transition-all active:scale-95">
+                    <span class="relative z-10 flex items-center gap-2">
+                        <i class="ph ph-check"></i> Kaydet
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
