@@ -10,6 +10,111 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Outfit', sans-serif !important; }
+
+        /* style.css - Ultra Premium ASM Takvim v3 (Glass 2.0) */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #fcfdff;
+            overscroll-behavior-y: none;
+            -webkit-tap-highlight-color: transparent;
+            height: 100%;
+            color: #1e293b;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        /* Mesh Gradient Animation */
+        .mesh-container {
+            filter: blur(100px);
+        }
+
+        .mesh-blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: rotate 20s infinite linear;
+        }
+
+        .mesh-1 { background: #60a5fa; top: -10%; left: -10%; animation-duration: 25s; }
+        .mesh-2 { background: #2dd4bf; bottom: -10%; right: -10%; animation-duration: 30s; animation-direction: reverse; }
+        .mesh-3 { background: #818cf8; top: 30%; left: 40%; animation-duration: 35s; }
+
+        @keyframes rotate {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            33% { transform: translate(50px, 80px) rotate(120deg) scale(1.1); }
+            66% { transform: translate(-40px, 40px) rotate(240deg) scale(0.9); }
+            100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+        }
+
+        /* Ultra-smooth customized Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.4); }
+
+        /* Glass 2.0 Card System */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 10px 20px -5px rgba(0, 0, 0, 0.03),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+        }
+
+        .month-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .month-card:hover {
+            background: rgba(255, 255, 255, 0.85);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 25px 50px -12px rgba(59, 130, 246, 0.15),
+                0 0 0 1px rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Day Cell Premium */
+        .day-cell {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .day-cell:hover:not(.empty) {
+            background-color: rgba(59, 130, 246, 0.08) !important;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .animate-enter {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Popover & Menus */
+        .menu-btn {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .menu-btn:hover {
+            transform: translateX(4px);
+            background-color: rgba(59, 130, 246, 0.08);
+        }
     </style>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +133,8 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="style.css?v=11">
+<!-- Style bypassed to index.html to force update -->
+    <!-- <link rel="stylesheet" href="style.css?v=11"> -->
     
     <!-- PWA Settings -->
     <link rel="manifest" href="manifest.json">
@@ -205,11 +311,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=12"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=11').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=12').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });
