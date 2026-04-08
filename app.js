@@ -323,7 +323,7 @@ function setActiveMonth(monthIndex, event) {
     appState.activeMonth = monthIndex;
     appState.currentPreview = null;
     render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
 }
 
 function openPopover(dateStr, event) {
