@@ -100,18 +100,38 @@ function renderYearView() {
     
     for (let month = 0; month < 12; month++) {
         const delay = month * 0.05;
+        let doc1Count = 0;
+        let doc2Count = 0;
         let assignedCount = 0;
         
         Object.keys(appState.assignments).forEach(k => {
-            if (k.startsWith(`${appState.activeYear}-${String(month + 1).padStart(2, '0')}`)) assignedCount++;
+            if (k.startsWith(`${appState.activeYear}-${String(month + 1).padStart(2, '0')}`)) {
+                assignedCount++;
+                if (appState.assignments[k] === 'doc1') doc1Count++;
+                if (appState.assignments[k] === 'doc2') doc2Count++;
+            }
         });
+
+        let docInfoHtml = '';
+        if (assignedCount === 0) {
+            docInfoHtml = `<p class="text-[13px] font-medium text-slate-500 mt-2">Henüz planlanmadı</p>`;
+        } else {
+            let pieces = [];
+            if (doc1Count > 0) {
+                pieces.push(`<div class="flex items-center gap-2 justify-center"><div class="w-2.5 h-2.5 rounded-full shadow-sm" style="background-color: ${appState.settings.doc1.color}"></div><span class="text-[13px] font-semibold text-slate-600">${doc1Count} iş günü planlandı</span></div>`);
+            }
+            if (doc2Count > 0) {
+                pieces.push(`<div class="flex items-center gap-2 justify-center"><div class="w-2.5 h-2.5 rounded-full shadow-sm" style="background-color: ${appState.settings.doc2.color}"></div><span class="text-[13px] font-semibold text-slate-600">${doc2Count} iş günü planlandı</span></div>`);
+            }
+            docInfoHtml = `<div class="flex flex-col gap-1.5 mt-3 w-full">${pieces.join('')}</div>`;
+        }
 
         html += `
             <div id="month-card-${month}" onclick="app.setPreviewMonth(${month})" class="bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 month-card-enter hover:bg-white hover:shadow-xl hover:border-blue-200 md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem]" style="animation-delay: ${delay}s">
                 <h3 id="month-title-${month}" class="text-2xl font-extrabold text-slate-800 tracking-tight transition-colors">${MONTHS[month]}</h3>
                 
-                <div id="month-info-${month}" class="mt-2 transition-opacity">
-                    <p class="text-sm font-medium text-slate-500">${assignedCount > 0 ? `<span class="bg-blue-100/50 text-blue-700 font-bold px-2 py-0.5 rounded-md">${assignedCount}</span> hekim atandı` : 'Henüz planlanmadı'}</p>
+                <div id="month-info-${month}" class="transition-opacity w-full">
+                    ${docInfoHtml}
                 </div>
                 
                 <div id="month-btn-${month}" style="display: none;" class="mt-5 w-full">
