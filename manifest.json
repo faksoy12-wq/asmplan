@@ -1,0 +1,27 @@
+{
+  "name": "ASM Çalışma Planı",
+  "short_name": "ASM Plan",
+  "description": "Aile Sağlığı Merkezleri için 2026/2027 Dinamik Nöbet ve Çalışma Planlayıcısı.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    }
+  ]
+}

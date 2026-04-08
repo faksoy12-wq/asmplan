@@ -22,6 +22,12 @@
         }
     </script>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#f8fafc">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen relative overflow-x-hidden selection:bg-blue-200">
     <!-- Background Elements -->
@@ -184,5 +190,14 @@
 
     <!-- Scripts -->
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('PWA ServiceWorker Registration Failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
