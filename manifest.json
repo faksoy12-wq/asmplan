@@ -10,12 +10,6 @@
     {
       "src": "icon.svg",
       "type": "image/svg+xml",
-      "sizes": "any",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon.png",
-      "type": "image/png",
       "sizes": "192x192 256x256 512x512",
       "purpose": "any maskable"
     }
