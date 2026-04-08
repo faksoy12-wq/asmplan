@@ -137,13 +137,13 @@
     <!-- <link rel="stylesheet" href="style.css?v=11"> -->
     
     <!-- PWA Settings -->
-    <link rel="manifest" href="manifest.json?v=14">
-    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json?v=15">
+    <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="ASM Takvim">
     
-    <!-- Windows Specific (Tile Fix) -->
+    <!-- Windows Specific Icon Background (Kept Blue to avoid white border) -->
     <meta name="msapplication-TileImage" content="icon_v13.png">
     <meta name="msapplication-TileColor" content="#3b82f6">
     <meta name="application-name" content="ASM Takvim">
@@ -315,11 +315,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="app.js?v=14"></script>
+    <script src="app.js?v=15"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=14').catch(err => {
+                navigator.serviceWorker.register('sw.js?v=15').catch(err => {
                     console.log('PWA ServiceWorker Registration Failed: ', err);
                 });
             });

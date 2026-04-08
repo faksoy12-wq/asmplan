@@ -4,8 +4,8 @@
   "description": "Aile Sağlığı Merkezleri için 2026/2027 Dinamik Nöbet ve Çalışma Planlayıcısı.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#3b82f6",
-  "theme_color": "#3b82f6",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "icon_v13.png",
