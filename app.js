@@ -64,7 +64,8 @@ let appState = {
     assignments: loadLocalData('asm_assignments', {}), 
     selectedDate: null,
     activeMonth: null, // null = Yıl Görünümü
-    activeYear: 2026
+    activeYear: 2026,
+    currentPreview: null
 };
 
 const calendarContainer = document.getElementById('calendarContainer');
@@ -93,6 +94,7 @@ function render() {
 }
 
 function renderYearView() {
+    appState.currentPreview = null;
     calendarContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6";
     let html = '';
     
@@ -105,13 +107,17 @@ function renderYearView() {
         });
 
         html += `
-            <div onclick="app.setActiveMonth(${month})" class="bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 month-card-enter hover:bg-white hover:shadow-xl md:hover:-translate-y-1 hover:border-blue-200 hover:ring-2 hover:ring-blue-50 transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center text-center h-48 md:h-[13rem]" style="animation-delay: ${delay}s">
-                <h3 class="text-2xl font-extrabold text-slate-800 tracking-tight group-hover:text-blue-600 transition-colors">${MONTHS[month]}</h3>
-                <p class="text-sm font-medium text-slate-500 mt-2">${assignedCount > 0 ? `<span class="bg-blue-100/50 text-blue-700 font-bold px-2 py-0.5 rounded-md">${assignedCount}</span> hekim atandı` : 'Henüz planlanmadı'}</p>
-                <div class="mt-auto pt-4 md:pt-0 w-full md:w-auto flex justify-center">
-                    <div class="w-full md:w-auto px-5 py-3 md:py-2.5 rounded-xl bg-slate-100/80 md:bg-transparent md:group-hover:bg-blue-50 text-slate-600 md:text-blue-600 group-hover:text-blue-600 text-[13px] font-bold opacity-100 md:opacity-0 md:group-hover:opacity-100 transform translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300 border border-slate-200/50 md:border-transparent md:group-hover:border-blue-100 flex items-center justify-center gap-1 active:scale-95">
-                        <span class="md:hidden">Aç</span><span class="hidden md:inline">Takvimi Yönet</span> <i class="ph ph-arrow-right"></i>
-                    </div>
+            <div id="month-card-${month}" onclick="app.setPreviewMonth(${month})" class="bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 month-card-enter hover:bg-white hover:shadow-xl hover:border-blue-200 md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem]" style="animation-delay: ${delay}s">
+                <h3 id="month-title-${month}" class="text-2xl font-extrabold text-slate-800 tracking-tight transition-colors">${MONTHS[month]}</h3>
+                
+                <div id="month-info-${month}" class="mt-2 transition-opacity">
+                    <p class="text-sm font-medium text-slate-500">${assignedCount > 0 ? `<span class="bg-blue-100/50 text-blue-700 font-bold px-2 py-0.5 rounded-md">${assignedCount}</span> hekim atandı` : 'Henüz planlanmadı'}</p>
+                </div>
+                
+                <div id="month-btn-${month}" style="display: none;" class="mt-5 w-full">
+                    <button onclick="app.setActiveMonth(${month}, event)" class="mx-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold shadow-lg shadow-blue-500/30 active:scale-95 flex items-center justify-center gap-2 hover:shadow-xl transition-all w-full max-w-[200px]">
+                        Planla <i class="ph ph-calendar-plus text-xl"></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -258,8 +264,44 @@ function setYear(y) {
     render();
 }
 
-function setActiveMonth(monthIndex) {
+function setPreviewMonth(monthIndex) {
+    if (appState.currentPreview === monthIndex) {
+        appState.currentPreview = null;
+    } else {
+        appState.currentPreview = monthIndex;
+    }
+    
+    for(let m = 0; m < 12; m++) {
+        const card = document.getElementById(`month-card-${m}`);
+        const title = document.getElementById(`month-title-${m}`);
+        const info = document.getElementById(`month-info-${m}`);
+        const btnObj = document.getElementById(`month-btn-${m}`);
+        
+        if (!card) continue;
+        
+        if (m === appState.currentPreview) {
+            // Aktif Et (Mavi Gölgeli Mikro UX)
+            card.className = "bg-white backdrop-blur-md rounded-[2.5rem] p-6 border border-blue-200 shadow-[0_10px_40px_-5px_rgba(59,130,246,0.3)] ring-4 ring-blue-50/80 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem] transform md:scale-105 scale-[1.02] z-10 relative";
+            title.className = "text-2xl font-extrabold text-blue-600 tracking-tight transition-colors drop-shadow-sm";
+            info.style.display = "none";
+            
+            btnObj.style.display = "block";
+            btnObj.className = "mt-5 w-full animate-[slideUpFade_0.2s_ease-out]";
+        } else {
+            // Pasif Et (Eski Haline Döndür)
+            card.className = "bg-white/60 backdrop-blur-md rounded-[2rem] p-6 border border-slate-200/60 hover:bg-white hover:shadow-xl md:hover:-translate-y-1 hover:border-blue-200 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center h-[13rem]";
+            title.className = "text-2xl font-extrabold text-slate-800 tracking-tight transition-colors";
+            info.style.display = "block";
+            btnObj.style.display = "none";
+            btnObj.className = "mt-5 w-full"; // Animasyonu sıfırla
+        }
+    }
+}
+
+function setActiveMonth(monthIndex, event) {
+    if (event) event.stopPropagation();
     appState.activeMonth = monthIndex;
+    appState.currentPreview = null;
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -453,6 +495,7 @@ function clearCurrentMonth() {
 window.app = {
     openPopover,
     setActiveMonth,
+    setPreviewMonth,
     setYear,
     clearCurrentMonth
 };
